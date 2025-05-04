@@ -1,3 +1,4 @@
+/* assets/css/breadcrumb.css */
 .breadcrumb {
   margin: 0;
   padding: 0;
@@ -23,15 +24,6 @@
 .breadcrumb li a {
   text-decoration: none;
   color: gray;
-}
-
-/* FontAwesome の擬似要素は不要なので削除 */
-/* パンくず先頭のホームアイコン */
-.breadcrumb-home-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: middle;
-  margin-right: 0.2em;
 }
 
 .breadcrumb li a:hover {
