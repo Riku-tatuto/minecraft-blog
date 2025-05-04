@@ -1,15 +1,39 @@
 .breadcrumb {
-  font-size: 0.875rem;
-  margin: 60px auto 1rem; /* ナビバー（高さ60px）のすぐ下 */
-  max-width: 960px;
-  padding: 0 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.breadcrumb a {
+.breadcrumb li {
+  display: inline;
+  list-style: none;
+  font-weight: bold;
+}
+
+.breadcrumb li:after {
+  content: '>';
+  padding: 0 0.2em;
+  color: #555;
+}
+
+.breadcrumb li:last-child:after {
+  content: '';
+}
+
+.breadcrumb li a {
   text-decoration: none;
-  color: #3366cc;
+  color: gray;
 }
 
-.breadcrumb span {
-  color: #666;
+.breadcrumb li:first-child a:before {
+  font-family: FontAwesome;
+  content: '\f015';
+  font-weight: normal;
+  font-size: 1.1em;
+  color: #2e7fea;
+  margin-right: 0.2em;
+}
+
+.breadcrumb li a:hover {
+  text-decoration: underline;
 }
