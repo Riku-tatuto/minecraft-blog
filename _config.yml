@@ -1,14 +1,13 @@
-# _config.yml
+# Jekyll の基本設定
+title: "Minecraft Blog"
+description: "マイクラブログ"
+# テーマ
+theme: minima
+# ページネーション設定
+plugins:
+  - jekyll-paginate
+paginate: 5
+paginate_path: "/page:num"
 
-title: My Minecraft Blog
-baseurl: "/minecraft-blog"  # GitHub Pages のリポジトリ名
-url: "https://riku-tatuto.github.io"
-
-# 管理画面 (admin.html) をビルドに含める
-include:
-  - admin.html
-
-# パーマリンクの末尾 .html を省略する設定
-permalink: pretty
-
-# 必要に応じて他の設定を追加
+# Markdown の拡張
+markdown: kramdown
