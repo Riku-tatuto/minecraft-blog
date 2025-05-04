@@ -4,53 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>記事投稿（管理者用）</title>
-  <script type="module" src="https://cdn.skypack.dev/@octokit/rest"></script>
+  <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body>
-  <h1>記事投稿（管理者用）</h1>
+  <header class="admin-header">
+    <h1>Minecraft Blog 管理画面</h1>
+  </header>
+
   <form id="postForm">
-    <input name="title" placeholder="記事タイトル" required>
-    <textarea name="body" placeholder="本文（Markdown可）" required></textarea>
-    <button type="submit">投稿</button>
+    <label for="token">GitHub Token</label>
+    <input id="token" name="token" type="password" placeholder="Personal Access Token を入力" required>
+
+    <label for="title">記事タイトル</label>
+    <input id="title" name="title" placeholder="例：秘密基地の作り方" required>
+
+    <label for="body">本文（Markdown可）</label>
+    <textarea id="body" name="body" rows="8" placeholder="ここに本文を入力" required></textarea>
+
+    <button type="submit">記事を投稿</button>
   </form>
 
-  <script type="module">
-    import { Octokit } from "https://cdn.skypack.dev/@octokit/rest";
-
-    // Personal Access Token は必ず安全に管理し、
-    // 本番ではサーバーサイドで処理してください。
-    const token = prompt("管理者用 GitHub Token を入力してください");
-    const octokit = new Octokit({ auth: token });
-
-    document.getElementById("postForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const title = e.target.title.value;
-      const body  = e.target.body.value;
-      const date  = new Date().toISOString().slice(0, 10);
-      const slug  = title.replace(/\s+/g, "-").toLowerCase();
-      const path  = `_posts/${date}-${slug}.md`;
-
-      // フロントマター付き Markdown を Base64 エンコード
-      const content = btoa(
-        `---\ntitle: "${title}"\ndate: ${date}\n---\n\n${body}`
-      );
-
-      try {
-        await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
-          owner: 'Riku-tatuto',
-          repo: 'minecraft-blog',
-          path,
-          message: `Add post: ${title}`,
-          content,
-          branch: 'main'
-        });
-        alert("記事をコミットしました！");
-        location.reload();
-      } catch (err) {
-        console.error(err);
-        alert("エラーが発生しました。コンソールをご確認ください。");
-      }
-    });
-  </script>
+  <script type="module" src="/assets/js/admin.js"></script>
 </body>
 </html>
