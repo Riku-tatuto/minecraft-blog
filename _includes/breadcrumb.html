@@ -1,0 +1,17 @@
+<nav class="breadcrumb">
+  <a href="{{ '/home' | relative_url }}">ホーム</a>
+  {% assign parts = page.url | split: '/' | reject: '' %}
+  {% for part in parts %}
+    {% capture this_url %}
+      {% for i in (0..forloop.index0) %}
+        /{{ parts[i] }}
+      {% endfor %}
+    {% endcapture %}
+    &nbsp;&gt;&nbsp;
+    {% if forloop.last %}
+      <span>{{ page.title }}</span>
+    {% else %}
+      <a href="{{ this_url | relative_url }}">{{ part | replace: '-', ' ' | capitalize }}</a>
+    {% endif %}
+  {% endfor %}
+</nav>
