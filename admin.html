@@ -9,7 +9,6 @@ layout: null
   <link rel="stylesheet" href="{{ '/assets/css/admin.css' | relative_url }}">
 </head>
 <body>
-  <!-- ログインフォーム -->
   <div class="login" id="login-form">
     <h2>管理者ログイン</h2>
     <input type="email" id="email" placeholder="メールアドレス">
@@ -17,7 +16,6 @@ layout: null
     <button id="login-btn">ログイン</button>
   </div>
 
-  <!-- 記事エディタ (ログイン後に表示) -->
   <div class="editor" id="editor" style="display:none;">
     <h2>新規記事投稿</h2>
     <input id="title" placeholder="タイトル">
@@ -34,19 +32,16 @@ layout: null
     <button id="logout-btn">ログアウト</button>
   </div>
 
-  <!-- Firebase SDK 読み込み -->
   {% include head.html %}
   <script>
-    // auth, db は head.html で初期化済み
+    const ADMIN_EMAIL = 'riku_tatuto@outlook.com';
 
     const loginForm = document.getElementById('login-form');
     const editor = document.getElementById('editor');
 
-    // 認証状態の監視
     auth.onAuthStateChanged(user => {
       if (user) {
-        // 管理者メールでない場合は強制ログアウト
-        if (user.email !== '管理者のメールアドレス@example.com') {
+        if (user.email !== ADMIN_EMAIL) {
           auth.signOut();
           alert('管理者以外はアクセスできません');
           return;
@@ -59,7 +54,6 @@ layout: null
       }
     });
 
-    // ログイン実行
     document.getElementById('login-btn').onclick = () => {
       const email = document.getElementById('email').value;
       const pass = document.getElementById('password').value;
@@ -67,10 +61,8 @@ layout: null
         .catch(err => alert('ログイン失敗: ' + err.message));
     };
 
-    // ログアウト
     document.getElementById('logout-btn').onclick = () => auth.signOut();
 
-    // 記事投稿
     document.getElementById('publish-btn').onclick = () => {
       const data = {
         title: document.getElementById('title').value,
