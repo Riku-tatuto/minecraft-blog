@@ -6,9 +6,10 @@ layout: null
 <head>
   <meta charset="UTF-8">
   <title>管理画面</title>
-  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="{{ '/assets/css/admin.css' | relative_url }}">
 </head>
 <body>
+  <!-- ログインフォーム -->
   <div class="login" id="login-form">
     <h2>管理者ログイン</h2>
     <input type="email" id="email" placeholder="メールアドレス">
@@ -16,6 +17,7 @@ layout: null
     <button id="login-btn">ログイン</button>
   </div>
 
+  <!-- 記事エディタ (ログイン後に表示) -->
   <div class="editor" id="editor" style="display:none;">
     <h2>新規記事投稿</h2>
     <input id="title" placeholder="タイトル">
@@ -32,44 +34,56 @@ layout: null
     <button id="logout-btn">ログアウト</button>
   </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<script>
-  // firebase 初期化 (省略)
-  const loginForm = document.getElementById('login-form');
-  const editor = document.getElementById('editor');
+  <!-- Firebase SDK 読み込み -->
+  {% include head.html %}
+  <script>
+    // auth, db は head.html で初期化済み
 
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      loginForm.style.display = 'none';
-      editor.style.display = 'block';
-    } else {
-      loginForm.style.display = 'block';
-      editor.style.display = 'none';
-    }
-  });
+    const loginForm = document.getElementById('login-form');
+    const editor = document.getElementById('editor');
 
-  document.getElementById('login-btn').onclick = () => {
-    const email = ...;
-    const pass = ...;
-    auth.signInWithEmailAndPassword(email, pass).catch(err => alert(err.message));
-  };
-  document.getElementById('logout-btn').onclick = () => auth.signOut();
+    // 認証状態の監視
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // 管理者メールでない場合は強制ログアウト
+        if (user.email !== '管理者のメールアドレス@example.com') {
+          auth.signOut();
+          alert('管理者以外はアクセスできません');
+          return;
+        }
+        loginForm.style.display = 'none';
+        editor.style.display = 'block';
+      } else {
+        loginForm.style.display = 'block';
+        editor.style.display = 'none';
+      }
+    });
 
-  document.getElementById('publish-btn').onclick = () => {
-    const data = {
-      title: document.getElementById('title').value,
-      category: document.getElementById('category').value,
-      slug: document.getElementById('slug').value,
-      content: document.getElementById('content').value,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    // ログイン実行
+    document.getElementById('login-btn').onclick = () => {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      auth.signInWithEmailAndPassword(email, pass)
+        .catch(err => alert('ログイン失敗: ' + err.message));
     };
-    db.collection('posts').add(data)
-      .then(() => alert('投稿完了'))
-      .catch(err => alert(err));
-  };
-</script>
+
+    // ログアウト
+    document.getElementById('logout-btn').onclick = () => auth.signOut();
+
+    // 記事投稿
+    document.getElementById('publish-btn').onclick = () => {
+      const data = {
+        title: document.getElementById('title').value,
+        category: document.getElementById('category').value,
+        slug: document.getElementById('slug').value,
+        content: document.getElementById('content').value,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+      db.collection('posts').add(data)
+        .then(() => alert('投稿完了'))
+        .catch(err => alert('投稿エラー: ' + err.message));
+    };
+  </script>
 </body>
 </html>
