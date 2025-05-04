@@ -5,9 +5,48 @@ permalink: /404.html
 ---
 
 <main class="container">
-  <section class="not-found">
-    <h1>404: ページが見つかりませんでした</h1>
-    <p>申し訳ありません。お探しのページは存在しないか、移動した可能性があります。</p>
-    <a class="btn-home" href="{{ '/home' | relative_url }}">ホームに戻る</a>
-  </section>
+  <div id="router-content">
+    <h1>ページが見つかりません</h1>
+    <p>お探しのページは存在しないか、移動した可能性があります。</p>
+  </div>
 </main>
+
+<script>
+  // ① GitHub Pages の baseurl を Liquid で取得
+  const BASE_URL = "{{ site.baseurl }}/";
+  // ② 現在のパスを取得して slug 部分を取り出し
+  //    e.g. "/minecraft-blog/plugin/test" → "plugin/test"
+  let path = location.pathname;
+  if (BASE_URL !== "/") {
+    // baseurl を削除
+    path = path.replace(new RegExp("^" + BASE_URL), "/");
+  }
+  const slug = path.replace(/^\/+|\/+$/g, "");
+
+  // ③ posts コレクションから一致する記事を探す
+  firebase.firestore().collection("posts")
+    .where("slug", "==", slug)
+    .get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        // 本当に無い場合はデフォルトの 404 をそのまま残す
+        return;
+      }
+      // 記事発見 → 動的に画面を切り替え
+      const data = snapshot.docs[0].data();
+      const container = document.getElementById("router-content");
+      container.innerHTML = `
+        <article class="router-article">
+          <h1>${data.title}</h1>
+          <div class="article-content">${data.content}</div>
+        </article>
+      `;
+      // ブラウザのタイトルも差し替え
+      document.title = data.title + " | My Minecraft Blog";
+      // 履歴（URL）はそのままにして、まるで実ファイルがあるかのように振る舞う
+      history.replaceState(null, "", BASE_URL + slug);
+    })
+    .catch(err => {
+      console.error("ルーターでの読み込み中にエラー", err);
+    });
+</script>
