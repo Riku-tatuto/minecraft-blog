@@ -11,3 +11,6 @@ paginate_path: "/page:num"
 
 # Markdown の拡張
 markdown: kramdown
+
+# 既存設定...
+baseurl: "/minecraft-blog"   # リポジトリ名を設定
