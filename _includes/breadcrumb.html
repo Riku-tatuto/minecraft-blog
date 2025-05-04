@@ -1,18 +1,32 @@
-<nav class="breadcrumb">
-  <a href="{{ '/home' | relative_url }}">ホーム</a>
-  {% assign raw_parts = page.url | split: '/' | reject: '' %}
-  {% assign parts = raw_parts | uniq %}  {# 重複セグメントを排除 #}
-  {% for part in parts %}
-    {% capture this_url %}
-      {% for i in (0..forloop.index0) %}
-        /{{ parts[i] }}
-      {% endfor %}
-    {% endcapture %}
-    &nbsp;&gt;&nbsp;
-    {% if forloop.last %}
-      <span>{{ page.title }}</span>
-    {% else %}
-      <a href="{{ this_url | relative_url }}">{{ part | replace: '-', ' ' | capitalize }}</a>
-    {% endif %}
-  {% endfor %}
+<nav aria-label="パンくずリスト">
+  <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <!-- ホーム -->
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="{{ '/home' | relative_url }}">
+        <span itemprop="name">ホーム</span>
+      </a>
+      <meta itemprop="position" content="1" />
+    </li>
+
+    {% assign parts = page.url | remove_first: '/' | split: '/' %}
+    {% for part in parts %}
+      {% assign idx = forloop.index | plus: 1 %}
+      <!-- 末尾セグメントのみリンクなし -->
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        {% if forloop.last %}
+          <span itemprop="name">{{ page.title }}</span>
+        {% else %}
+          {% capture href %}
+            {% for i in (0..forloop.index0) %}
+              /{{ parts[i] }}
+            {% endfor %}
+          {% endcapture %}
+          <a itemprop="item" href="{{ href | relative_url }}">
+            <span itemprop="name">{{ part | capitalize }}</span>
+          </a>
+        {% endif %}
+        <meta itemprop="position" content="{{ idx }}" />
+      </li>
+    {% endfor %}
+  </ol>
 </nav>
