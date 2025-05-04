@@ -1,11 +1,15 @@
+---
+layout: null
+permalink: /
+---
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/home">
+  <meta http-equiv="refresh" content="0; url={{ '/home' | relative_url }}">
   <title>Redirecting…</title>
 </head>
 <body>
-  <p>ホームへ移動中…もし自動で移動しない場合は、<a href="/home">こちら</a>をクリックしてください。</p>
+  <p>ホームへ移動中…もし自動で移動しない場合は、<a href="{{ '/home' | relative_url }}">こちら</a>をクリックしてください。</p>
 </body>
 </html>
