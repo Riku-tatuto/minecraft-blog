@@ -9,8 +9,12 @@
     <link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">
   </head>
   <body>
-    {% include nav.html %}
-    {% include breadcrumb.html %}
+   {%- comment -%}
+   ホーム (/home) と 404ページ ではパンくず非表示
+   {%- endcomment -%}
+   {% unless page.url == '/' or page.url == '/home' or page.url == '/404.html' %}
+     {% include breadcrumb.html %}
+   {% endunless %}
 
     <main class="site-content">
       {{ content }}
