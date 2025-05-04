@@ -3,19 +3,3 @@ layout: default
 title: Home
 permalink: /home
 ---
-<main class="container">
-  <div id="post-list"></div>
-</main>
-<script>
-  const postList = document.getElementById('post-list');
-  db.collection('posts').orderBy('createdAt', 'desc').get().then(snapshot => {
-    snapshot.forEach(doc => {
-      const post = doc.data();
-      const html = `
-      <article>
-        <h2><a href="/${post.slug}">${post.title}</a></h2>
-      </article>`;
-      postList.innerHTML += html;
-    });
-  });
-</script>
