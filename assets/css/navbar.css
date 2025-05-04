@@ -1,0 +1,83 @@
+/* ナビゲーション共通リセット */
+.site-nav,
+.site-nav ul,
+.site-nav li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ナビバー本体 */
+.site-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #e2e2e2;
+  z-index: 1000;
+}
+
+/* 内側のコンテナ */
+.nav-container {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* タイトル左寄せ・メニュー右寄せ */
+  padding: 0 1rem;
+  height: 60px;
+}
+
+/* サイトロゴ（タイトル） */
+.site-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+/* メニューリスト */
+.nav-list {
+  display: flex;
+  align-items: center;
+}
+
+/* 各メニュー項目 */
+.nav-item {
+  position: relative; /* ドロップダウン用 */
+  margin-left: 1.5rem;
+}
+
+.nav-item a {
+  text-decoration: none;
+  font-size: 1rem;
+  color: #333;
+  padding: 0.5rem;
+}
+
+/* ドロップダウンメニュー本体（非表示がデフォルト） */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* 親メニューの直下 */
+  left: 0;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  white-space: nowrap;
+}
+
+/* ドロップダウン項目 */
+.dropdown-menu li {
+  margin: 0;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 0.5rem 1rem;
+}
+
+/* ホバーでドロップダウンを表示 */
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
