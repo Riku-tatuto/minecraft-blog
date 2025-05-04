@@ -1,33 +1,25 @@
 ---
 layout: default
-title: Home
-permalink: /home
+permalink: /home.html
 ---
-<main class="container">
-  <h1>最新記事</h1>
-  <div id="post-list">読み込み中…</div>
-</main>
-<script>
-  // GitHub Pages の baseurl を Liquid で取得
-  const BASE_URL = "{{ site.baseurl }}";
-  const postList = document.getElementById('post-list');
 
-  db.collection('posts').orderBy('createdAt', 'desc').get()
-    .then(snapshot => {
-      postList.innerHTML = '';  // 読み込み中メッセージをクリア
-      snapshot.forEach(doc => {
-        const post = doc.data();
-        // リンク生成に baseurl を含める
-        const link = `${BASE_URL}/${post.slug}`;
-        const item = document.createElement('article');
-        item.innerHTML = `
-          <h2><a href="${link}">${post.title}</a></h2>
-          <p>カテゴリ: ${post.category}</p>
-        `;
-        postList.appendChild(item);
-      });
-    })
-    .catch(err => {
-      postList.innerHTML = `<p>記事の読み込みに失敗しました: ${err.message}</p>`;
-    });
-</script>
+<section>
+  <h1>ブログ一覧</h1>
+  <ul>
+    {% for post in paginator.posts %}
+      <li>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+        <small>{{ post.date | date: "%Y-%m-%d" }}</small>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <nav class="pagination">
+    {% if paginator.previous_page %}
+      <a href="{{ paginator.previous_page_path }}">← 前へ</a>
+    {% endif %}
+    {% if paginator.next_page %}
+      <a href="{{ paginator.next_page_path }}">次へ →</a>
+    {% endif %}
+  </nav>
+</section>
