@@ -1,0 +1,75 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>管理画面</title>
+  <link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body>
+  <div class="login" id="login-form">
+    <h2>管理者ログイン</h2>
+    <input type="email" id="email" placeholder="メールアドレス">
+    <input type="password" id="password" placeholder="パスワード">
+    <button id="login-btn">ログイン</button>
+  </div>
+
+  <div class="editor" id="editor" style="display:none;">
+    <h2>新規記事投稿</h2>
+    <input id="title" placeholder="タイトル">
+    <select id="category">
+      <option value="plugin">プラグイン</option>
+      <option value="mod">Mod</option>
+      <option value="vanilla">バニラ</option>
+      <option value="server">サーバー</option>
+      <option value="commands">コマンド</option>
+    </select>
+    <input id="slug" placeholder="URLスラグ（例: plugin/kizi1）">
+    <textarea id="content" placeholder="記事本文 (HTML)"></textarea>
+    <button id="publish-btn">公開</button>
+    <button id="logout-btn">ログアウト</button>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script>
+  // firebase 初期化 (省略)
+  const loginForm = document.getElementById('login-form');
+  const editor = document.getElementById('editor');
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      loginForm.style.display = 'none';
+      editor.style.display = 'block';
+    } else {
+      loginForm.style.display = 'block';
+      editor.style.display = 'none';
+    }
+  });
+
+  document.getElementById('login-btn').onclick = () => {
+    const email = ...;
+    const pass = ...;
+    auth.signInWithEmailAndPassword(email, pass).catch(err => alert(err.message));
+  };
+  document.getElementById('logout-btn').onclick = () => auth.signOut();
+
+  document.getElementById('publish-btn').onclick = () => {
+    const data = {
+      title: document.getElementById('title').value,
+      category: document.getElementById('category').value,
+      slug: document.getElementById('slug').value,
+      content: document.getElementById('content').value,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    db.collection('posts').add(data)
+      .then(() => alert('投稿完了'))
+      .catch(err => alert(err));
+  };
+</script>
+</body>
+</html>
