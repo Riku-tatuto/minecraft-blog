@@ -1,0 +1,15 @@
+.breadcrumb {
+  font-size: 0.875rem;
+  margin: 80px auto 1rem; /* ナビ下＆本文上 */
+  max-width: 960px;
+  padding: 0 1rem;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: #3366cc;
+}
+
+.breadcrumb span {
+  color: #666;
+}
