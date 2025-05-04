@@ -3,3 +3,29 @@ layout: default
 title: Home
 permalink: /home
 ---
+
+<main class="container">
+  <h1>最新記事</h1>
+  <div id="post-list">読み込み中…</div>
+</main>
+
+<script>
+  // Firestore から posts コレクションを取得して一覧表示
+  const postList = document.getElementById('post-list');
+  db.collection('posts').orderBy('createdAt', 'desc').get()
+    .then(snapshot => {
+      postList.innerHTML = '';  // 読み込み中メッセージをクリア
+      snapshot.forEach(doc => {
+        const post = doc.data();
+        const item = document.createElement('article');
+        item.innerHTML = `
+          <h2><a href="/${post.slug}">${post.title}</a></h2>
+          <p>カテゴリ: ${post.category}</p>
+        `;
+        postList.appendChild(item);
+      });
+    })
+    .catch(err => {
+      postList.innerHTML = `<p>記事の読み込みに失敗しました: ${err.message}</p>`;
+    });
+</script>
