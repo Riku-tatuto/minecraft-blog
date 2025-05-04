@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>記事投稿（管理者用）</title>
-  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="{{ '/assets/css/admin.css' | relative_url }}">
 </head>
 <body>
   <header class="admin-header">
@@ -24,6 +24,6 @@
     <button type="submit">記事を投稿</button>
   </form>
 
-  <script type="module" src="/assets/js/admin.js"></script>
+  <script type="module" src="{{ '/assets/js/admin.js' | relative_url }}"></script>
 </body>
 </html>
