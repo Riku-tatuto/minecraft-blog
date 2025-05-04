@@ -1,9 +1,14 @@
+---
+layout: default
+title: Home
+permalink: /home
+---
 <main class="container">
   <h1>最新記事</h1>
   <div id="post-list">読み込み中…</div>
 </main>
 <script>
-  // baseUrl を Liquid で埋め込み
+  // GitHub Pages の baseurl を Liquid で取得
   const BASE_URL = "{{ site.baseurl }}";
   const postList = document.getElementById('post-list');
 
@@ -12,6 +17,7 @@
       postList.innerHTML = '';  // 読み込み中メッセージをクリア
       snapshot.forEach(doc => {
         const post = doc.data();
+        // リンク生成に baseurl を含める
         const link = `${BASE_URL}/${post.slug}`;
         const item = document.createElement('article');
         item.innerHTML = `
