@@ -1,40 +1,41 @@
 import { Octokit } from "https://cdn.skypack.dev/@octokit/rest";
 
-// UTF-8 文字列を Base64 に変換する関数
+// UTF-8 → Base64 エンコード
 function utf8ToBase64(str) {
-  // encodeURIComponent で UTF-8 にエンコードし、%xx を文字に戻してから btoa
-  return btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) =>
-      String.fromCharCode(parseInt(p1, 16))
-    )
-  );
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p) => String.fromCharCode(parseInt(p,16))));
 }
 
 document.getElementById('postForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const token = document.getElementById('token').value.trim();
-  const title = document.getElementById('title').value.trim();
-  const body  = document.getElementById('body').value.trim();
+  const token = document.getElementById('token').value;
+  const title = document.getElementById('title').value;
+  const category = document.getElementById('category').value;
+  const body = document.getElementById('body').value;
+  const permalinkInput = document.getElementById('permalink').value.trim();
 
   const octokit = new Octokit({ auth: token });
   const date = new Date().toISOString().slice(0,10);
-  const slug = title.replace(/\s+/g, '-').toLowerCase();
-  const path = `_posts/${date}-${slug}.md`;
+  const slug = permalinkInput
+    ? permalinkInput.replace(/^\//, '').replace(/\.html$/, '')
+    : `${date}-${title.replace(/\s+/g,'-').toLowerCase()}`;
+  const filename = `_posts/${slug}.html`;
 
-  // フロントマター付き Markdown テキスト
-  const markdown = `---\ntitle: "${title}"\ndate: ${date}\n---\n\n${body}`;
-  // Latin1 外文字を回避して Base64 化
-  const content = utf8ToBase64(markdown);
+  // front matter
+  let fm = `---\ntitle: \"${title}\"\ndate: ${date}\ncategory: ${category}\n`;
+  if(permalinkInput) fm += `permalink: ${permalinkInput}\n`;
+  fm += `---\n`;
+
+  const content = utf8ToBase64(fm + body);
 
   try {
     await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
-      owner: 'Riku-tatuto', repo: 'minecraft-blog', path,
+      owner: 'Riku-tatuto', repo: 'minecraft-blog', path: filename,
       message: `Add post: ${title}`, content, branch: 'main'
     });
-    alert('記事をコミットしました！');
+    alert('記事をコミットしました');
     e.target.reset();
-  } catch (err) {
+  } catch(err) {
     console.error(err);
-    alert('エラーが発生しました。コンソールをご確認ください。');
+    alert('投稿エラー: コンソールを確認');
   }
 });
