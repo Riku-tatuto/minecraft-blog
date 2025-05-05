@@ -30,7 +30,14 @@ document.getElementById("postForm").addEventListener("submit", async e => {
 
   let fm = `---\nlayout: post\ntitle: "${title}"\ndate: ${date}\ncategory: ${category}\n`;
   if (permalinkInput) fm += `permalink: "${permalinkInput}"\n`;
-  fm += `thumbnail: "${document.getElementById("thumbnail").value || ''}"\n`;
+  // ファイル入力要素の id=thumbnailFile を参照
+  const thumbElem = document.getElementById("thumbnailFile");
+  let thumbPath = "";
+  if (thumbElem && thumbElem.files.length) {
+    // 既存ロジックでアップロード→thumbPath をセットしている想定
+    thumbPath = uploadedThumbnailPath; 
+  }
+  fm += `thumbnail: "${thumbPath}"\n`;
   fm += `---\n`;
 
   const content = utf8ToBase64(fm + body);
