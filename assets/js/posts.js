@@ -1,66 +1,38 @@
 import { db } from './firebase.js';
-import { doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+import { doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 
-/**
- * posts: { title, url, date, slug } の配列を受け取り、
- * #posts-container 要素内にリストを表示する。
- * 各記事に「いいね」ボタンとカウントを付与。
- */
 export async function renderPosts(posts) {
-  const container = document.getElementById('posts-container');
-  container.innerHTML = '';
+  const c = document.getElementById('posts-container'); c.innerHTML='';
+  const likesSnap = await getDoc(doc(db,'likes','_all')).catch(()=>({exists:()=>false}));
+  const allLikes = likesSnap.exists()?likesSnap.data():{};
 
-  // Firebase から全記事のいいね数をまとめて取得
-  const likesSnapshot = await getDoc(doc(db, 'likes', '_all'))
-    .catch(()=>({ exists:()=>false }));
-  const allLikes = likesSnapshot.exists() ? likesSnapshot.data() : {};
-
-  for (const post of posts) {
-    const count = allLikes[post.slug] || 0;
-    const card = document.createElement('div');
-    card.className = 'post-card';
+  posts.forEach(p=>{
+    const count = allLikes[p.slug]||0;
+    const card = document.createElement('div'); card.className='post-card';
     card.innerHTML = `
-      <h2><a href="${post.url}">${post.title}</a></h2>
-      <small>${post.date}</small>
-      <div>
-        <button class="like-btn" data-slug="${post.slug}">👍</button>
-        <span class="like-count" id="like-${post.slug}">${count}</span>
-      </div>
-    `;
-    container.appendChild(card);
-  }
+      <h2><a href="${p.url}">${p.title}</a></h2>
+      <small>${p.date}</small>
+      <div><button class="like-btn" data-slug="${p.slug}">👍</button>
+      <span id="like-${p.slug}">${count}</span></div>`;
+    c.appendChild(card);
+  });
 
-  // いいねボタンクリック時のハンドラ
-  container.addEventListener('click', async e => {
-    if (!e.target.classList.contains('like-btn')) return;
-    const slug = e.target.dataset.slug;
-    const countEl = document.getElementById(`like-${slug}`);
-    // Firestore の likes/_all ドキュメントをインクリメント
-    await updateDoc(doc(db, 'likes', '_all'), { [slug]: increment(1) });
-    countEl.textContent = parseInt(countEl.textContent) + 1;
+  c.addEventListener('click', async e=>{
+    if(!e.target.classList.contains('like-btn')) return;
+    const slug=e.target.dataset.slug;
+    const el=document.getElementById(`like-${slug}`);
+    await updateDoc(doc(db,'likes','_all'),{[slug]:increment(1)});
+    el.textContent = parseInt(el.textContent)+1;
   });
 }
 
-/**
- * JSON から記事を取得し、オプションでソート／フィルタ
- */
-export async function fetchAndRender({ searchTerm = '', sortByLikes = false } = {}) {
+export async function fetchAndRender({searchTerm='',sortByLikes=false}={}){
   const res = await fetch('/minecraft-blog/posts.json');
-  let posts = await res.json();
-
-  // 検索フィルタ
-  if (searchTerm) {
-    const term = searchTerm.toLowerCase();
-    posts = posts.filter(p => p.title.toLowerCase().includes(term));
+  let posts=await res.json();
+  if(searchTerm) posts=posts.filter(p=>p.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  if(sortByLikes){
+    const snap=await getDoc(doc(db,'likes','_all')); const likes=snap.exists()?snap.data():{};
+    posts.sort((a,b)=>(likes[b.slug]||0)-(likes[a.slug]||0));
   }
-
-  // いいね順ソート
-  if (sortByLikes) {
-    // Firestore から取得
-    const likesSnap = await getDoc(doc(db, 'likes', '_all')); 
-    const allLikes = likesSnap.exists() ? likesSnap.data() : {};
-    posts.sort((a,b) => (allLikes[b.slug]||0) - (allLikes[a.slug]||0));
-  }
-
   await renderPosts(posts);
 }
