@@ -12,7 +12,7 @@ export async function renderPosts(posts) {
     const count = allLikes[p.slug]||0;
     const card = document.createElement('div'); card.className='post-card';
     card.innerHTML = `
-      <h2><a href="${p.url}">${p.title}</a></h2>
+      <h2><a href="/minecraft-blog/${p.url}">${p.title}</a></h2>
       <small>${p.date}</small>
       <div><button class="like-btn" data-slug="${p.slug}">👍</button>
       <span id="like-${p.slug}">${count}</span></div>`;
