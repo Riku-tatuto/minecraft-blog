@@ -1,0 +1,14 @@
+---
+layout: none    # レイアウト無効
+permalink: /posts.json
+---
+[
+{% for post in site.posts %}
+  {
+    "title": "{{ post.title | escape }}",
+    "url": "{{ post.url }}",
+    "date": "{{ post.date | date: '%Y-%m-%d' }}",
+    "slug": "{{ post.url | split: '/' | last | split: '.' | first }}"
+  }{% if forloop.last == false %},{% endif %}
+{% endfor %}
+]
