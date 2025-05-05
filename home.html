@@ -1,0 +1,20 @@
+---
+layout: default
+permalink: /home.html
+---
+
+<section>
+  <h1>ブログ一覧</h1>
+  <div>
+    <label><input type="checkbox" id="sort-likes"> いいね順にソート</label>
+  </div>
+  <div id="posts-container"></div>
+</section>
+
+<script type="module">
+  import { fetchAndRender } from '/minecraft-blog/assets/js/posts.js';
+  const checkbox = document.getElementById('sort-likes');
+  checkbox.addEventListener('change', () => fetchAndRender({ sortByLikes: checkbox.checked }));
+  // 初期表示
+  fetchAndRender();
+</script>
