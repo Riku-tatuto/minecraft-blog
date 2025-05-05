@@ -1,26 +1,15 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page.title }} | {{ site.title }}</title>
-  <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
-  <header>
-    <h1><a href="/">{{ site.title }}</a></h1>
-  </header>
-  <main>
-    <article>
-      <h2>{{ page.title }}</h2>
-      <p><small>{{ page.date | date: "%Y-%m-%d" }}</small></p>
-      <div class="content">
-        {{ content }}
-      </div>
-    </article>
-  </main>
-  <footer>
-    <p>&copy; {{ site.time | date: "%Y" }} Minecraft Blog</p>
-  </footer>
-</body>
-</html>
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ page.title }}</title><link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css"></head><body>
+<nav class="breadcrumb">
+  <a href="{{ site.baseurl }}/home.html">ホーム</a>
+  {% if page.category %}&gt; <a href="{{ site.baseurl }}/category/{{ page.category }}.html">{{ page.category }}</a>{% endif %}
+  &gt; {{ page.title }}
+</nav>
+<header class="site-header">
+  <h1><a href="{{ site.baseurl }}/home.html">{{ site.title }}</a></h1>
+</header>
+<main><article>
+  <h2>{{ page.title }}</h2><p><small>{{ page.date | date: "%Y-%m-%d" }}</small></p>
+  <div class="content">{{ content }}</div>
+</article></main>
+<footer>&copy;{{ site.time | date: "%Y" }} Minecraft Blog</footer>
+</body></html>
