@@ -11,7 +11,7 @@ permalink: /posts.json
     "date":      {{ post.date     | date: "%Y-%m-%d"  | jsonify }},
     "slug":      {{ post.url      | split: "/" | last | split: "." | first | jsonify }},
     "category":  {{ post.category | default: "uncategorized" | jsonify }},
-    "thumbnail": {{ post.thumbnail | default: "/minecraft-blog/assets/default.jpg" | jsonify }}
+    "thumbnail": {{ post.thumbnail | default: "/assets/default.jpg" | jsonify }}
   }{% if forloop.last == false %},{% endif %}
 {% endfor %}
 ]
