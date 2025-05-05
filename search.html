@@ -2,19 +2,17 @@
 layout: default
 permalink: /search.html
 ---
-
-<section>
+<section class="search">
   <h1>記事検索</h1>
   <input type="text" id="search-input" placeholder="キーワードを入力">
   <button id="search-btn">検索</button>
   <div id="posts-container"></div>
 </section>
-
 <script type="module">
   import { fetchAndRender } from '/minecraft-blog/assets/js/posts.js';
   const input = document.getElementById('search-input');
   const btn   = document.getElementById('search-btn');
   btn.addEventListener('click', () => fetchAndRender({ searchTerm: input.value }));
-  // エンターキー対応
-  input.addEventListener('keydown', e => e.key === 'Enter' && fetchAndRender({ searchTerm: input.value }));
+  input.addEventListener('keydown', e => e.key==='Enter' && fetchAndRender({ searchTerm: input.value }));
 </script>
+<link rel="stylesheet" href="assets/css/home.css">
