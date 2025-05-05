@@ -1,3 +1,7 @@
+---
+layout: none
+permalink: /posts.json
+---
 [
 {% assign b = site.baseurl %}
 {% for post in site.posts %}
