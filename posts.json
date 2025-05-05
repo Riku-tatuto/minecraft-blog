@@ -1,14 +1,16 @@
 ---
-layout: none    # レイアウト無効
+layout: none
 permalink: /posts.json
 ---
 [
+{% assign b = site.baseurl %}
 {% for post in site.posts %}
   {
     "title": "{{ post.title | escape }}",
-    "url": "{{ post.url }}",
+    "url": "{{ b }}{{ post.url }}",
     "date": "{{ post.date | date: '%Y-%m-%d' }}",
-    "slug": "{{ post.url | split: '/' | last | split: '.' | first }}"
+    "slug": "{{ post.url | split: '/' | last | split: '.' | first }}",
+    "category": "{{ post.category | default: 'uncategorized' }}"
   }{% if forloop.last == false %},{% endif %}
 {% endfor %}
 ]
