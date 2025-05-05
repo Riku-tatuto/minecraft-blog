@@ -14,3 +14,11 @@ markdown: kramdown
 
 # 既存設定...
 baseurl: "/minecraft-blog"   # リポジトリ名を設定
+
+# posts フォルダ内のファイルは自動で layout: post を適用
+defaults:
+  - scope:
+      path: "_posts"
+      type: "posts"
+    values:
+      layout: post
