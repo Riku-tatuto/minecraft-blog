@@ -1,0 +1,15 @@
+---
+layout: default
+---
+<section class="home-list">
+  <h1>{{ page.category }} 一覧</h1>
+  <ul>
+    {% assign cat = page.category %}
+    {% for post in site.posts %}
+      {% if post.category == cat %}
+        <li><a href="{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date: "%Y-%m-%d" }}</small></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/home.css">
