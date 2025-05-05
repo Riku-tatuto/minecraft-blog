@@ -6,10 +6,10 @@ permalink: /posts.json
 {% assign b = site.baseurl %}
 {% for post in site.posts %}
   {
-    "title": "{{ post.title | escape }}",
-    "url": "{{ b }}{{ post.url }}",
-    "date": "{{ post.date | date: '%Y-%m-%d' }}",
-    "slug": "{{ post.url | split: '/' | last | split: '.' | first }}",
+    "title":  "{{ post.title  | escape }}",
+    "url":    "{{ b }}{{ post.url }}",
+    "date":   "{{ post.date   | date: '%Y-%m-%d' }}",
+    "slug":   "{{ post.url    | split: '/' | last | split: '.' | first }}",
     "category": "{{ post.category | default: 'uncategorized' }}"
   }{% if forloop.last == false %},{% endif %}
 {% endfor %}
