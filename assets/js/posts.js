@@ -30,7 +30,7 @@ export async function renderPosts(posts) {
 }
 
 export async function fetchAndRender({searchTerm='',sortByLikes=false}={}){
-  const res = await fetch('posts.json');
+  const res = await fetch(`/minecraft-blog/posts.json?ts=${Date.now()}`);
   let posts = await res.json();
   if(searchTerm) posts = posts.filter(p=>p.title.toLowerCase().includes(searchTerm.toLowerCase()));
   if(sortByLikes) {
