@@ -1,6 +1,16 @@
 ---
 layout: category
-category: plugin   # または mod
-permalink: /plugin.html  # mod.htmlは /mod.html
+category: plugin   # mod の場合は "mod"
+permalink: /plugin.html   # mod.html は /mod.html
 ---
-<link rel="stylesheet" href="assets/css/home.css">
+<link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">
+
+<section id="posts-container" class="home-list"></section>
+
+<script type="module">
+  import { fetchAndRender } from '{{ "/assets/js/posts.js" | relative_url }}';
+  // カテゴリ絞り込みは Liquid front‑matter の page.category を利用
+  fetchAndRender({ searchTerm: '', sortByLikes: false }).then(() => {
+    // 必要ならここで絞り込み DOM 操作
+  });
+</script>
