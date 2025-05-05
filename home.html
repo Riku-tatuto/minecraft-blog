@@ -2,7 +2,7 @@
 layout: default
 permalink: /home.html
 ---
-<section>
+<section class="home-list">
   <h1>ブログ一覧</h1>
   <label><input type="checkbox" id="sort-likes"> いいね順</label>
   <div id="posts-container"></div>
@@ -13,3 +13,4 @@ permalink: /home.html
   cb.addEventListener('change',()=>fetchAndRender({sortByLikes:cb.checked}));
   fetchAndRender();
 </script>
+<link rel="stylesheet" href="assets/css/home.css">
