@@ -21,7 +21,8 @@ export async function renderPosts(posts) {
 
 // JSON を取得し検索・ソート・描画
 export async function fetchAndRender({ searchTerm = '', sortByLikes = false } = {}) {
-  const res = await fetch(`/minecraft-blog/posts.json?ts=${Date.now()}`);
+  // キャッシュバスティング付きで常に最新取得
+  const res = await fetch(`${'{{ site.baseurl }}'.replace(/^\s+|\s+$/g,'')}/posts.json?ts=${Date.now()}`);
   let posts = await res.json();
 
   // 検索フィルタ
