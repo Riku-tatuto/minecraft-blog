@@ -81,3 +81,8 @@
 .dropdown:hover .dropdown-menu {
   display: block;
 }
+
+/* ナビバー（60px）分だけコンテンツを下にずらす */
+body {
+  padding-top: 60px;
+}
