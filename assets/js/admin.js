@@ -55,8 +55,11 @@ document.getElementById("postForm").addEventListener("submit", async e => {
   const slug = `${date}-${title.replace(/\s+/g,'-').toLowerCase()}`;
   const filename = `_posts/${slug}.html`;
 
-  let fm = `---\nlayout: post\ntitle: "${title}"\ndate: ${date}\ncategory: ${category}\n`;
-  if(thumbPath) fm += `thumbnail: "${thumbPath}"\n`;
+ let fm = `---\nlayout: post\ntitle: "${title}"\ndate: ${date}\ncategory: ${category}\n`;
+ if (permalinkInput) {
+   // permalink 値をクォートで囲む
+   fm += `permalink: "${permalinkInput}"\n`;
+ }
   fm += `---\n`;
 
   const content = utf8ToBase64(fm + body);
