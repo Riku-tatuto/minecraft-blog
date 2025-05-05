@@ -5,19 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title | default: site.title }}</title>
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/navbar.css">
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/home.css">
 </head>
 <body>
-  <header class="site-header">
-    <nav>
-      <a href="{{ site.baseurl }}/home.html">ホーム</a>
-      <a href="{{ site.baseurl }}/plugin.html">プラグイン</a>
-      <a href="{{ site.baseurl }}/mod.html">MOD</a>
-      <a href="{{ site.baseurl }}/search.html">検索</a>
-    </nav>
-  </header>
+  <nav class="site-nav">
+    <div class="nav-container">
+      <a class="site-logo" href="{{ site.baseurl }}/home.html">{{ site.title }}</a>
+      <ul class="nav-list">
+        <li class="nav-item dropdown">
+          <a href="#">プラグイン／MOD関連</a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ site.baseurl }}/plugin.html">プラグイン関連</a></li>
+            <li><a href="{{ site.baseurl }}/mod.html">MOD関連</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a href="{{ site.baseurl }}/search.html">検索</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <main>
     {{ content }}
   </main>
+
   <footer>&copy; {{ site.time | date: "%Y" }} Minecraft Blog</footer>
 </body>
 </html>
