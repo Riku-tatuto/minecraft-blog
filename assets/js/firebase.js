@@ -4,9 +4,12 @@ import { getFirestore, doc, getDoc, updateDoc, increment, getDocs, collection } 
 
 // Firebase 設定
 const firebaseConfig = {
-  apiKey: "AIzaSyA7zF6AG8DutMOe2PZWmr3aGZU9RhsU9-A",
-  authDomain: "schoolweb-db.firebaseapp.com",
-  projectId: "schoolweb-db",
+  apiKey: "AIzaSyCgKYxdOg2jEEltsACaN6Wp8K-Z2iX18f4",
+  authDomain: "minecraft-tatuto-blog.firebaseapp.com",
+  projectId: "minecraft-tatuto-blog",
+  storageBucket: "minecraft-tatuto-blog.firebasestorage.app",
+  messagingSenderId: "63127091394",
+  appId: "1:63127091394:web:e018675b35f4d07a2a235b"
 };
 
 // 初期化
