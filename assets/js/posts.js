@@ -1,5 +1,3 @@
-// assets/js/posts.js
-
 import { db } from './firebase.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 
@@ -21,19 +19,16 @@ export async function renderPosts(posts) {
 
 // JSON を取得し検索・ソート・描画
 export async function fetchAndRender({ searchTerm = '', sortByLikes = false } = {}) {
-  // → 単に相対パスで posts.json を叩けば、home.html/plugin.html いずれの場所からも
-  //    /minecraft-blog/posts.json にマッピングされる
+  // 相対パスで必ず /minecraft-blog/posts.json を取得
   const res = await fetch('posts.json?ts=' + Date.now());
   let posts = await res.json();
 
-  // 検索フィルタ
   if (searchTerm) {
     posts = posts.filter(p =>
       p.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
 
-  // いいねソート（不要なら削除）
   if (sortByLikes) {
     const likesRef = doc(db, 'likes', '_all');
     const snap = await getDoc(likesRef).catch(() => ({ exists: () => false }));
