@@ -12,19 +12,17 @@
   {% include nav.html %}
 
   <nav class="breadcrumb">
-    <a href="{{ site.baseurl }}/home.html">ホーム</a>
-    {% if page.category %}&nbsp;&gt;&nbsp;<a href="{{ site.baseurl }}/{{ page.category }}.html">{{ page.category }}</a>{% endif %}
-    &nbsp;&gt;&nbsp;{{ page.title }}
+    <a href="{{ site.baseurl }}/home.html">ホーム</a> &gt;
+    <a href="{{ site.baseurl }}/{{ page.category }}.html">{{ page.category }}</a> &gt;
+    <span>{{ page.title }}</span>
   </nav>
-
   <main>
-    <div style="margin-top: 20px;">
-      <article>
-        <h1>{{ page.title }}</h1>
-        <p><small>{{ page.date | date: "%Y-%m-%d" }}</small></p>
-        <div class="content">{{ content }}</div>
-      </article>
-    </div>
+    <h1>{{ page.title }}</h1>
+    {% if page.thumbnail %}
+      <img src="{{ page.thumbnail }}" class="post-thumb" alt="サムネイル">
+    {% endif %}
+    {{ content }}
+    <div id="like-container"><!-- いいねボタンは記事ページでのみ出す --></div>
   </main>
   <footer>&copy; {{ site.time | date: "%Y" }} Minecraft Blog</footer>
 </body>
