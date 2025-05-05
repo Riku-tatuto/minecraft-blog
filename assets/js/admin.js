@@ -10,23 +10,25 @@ function utf8ToBase64(str) {
   );
 }
 
-document.getElementById('postForm').addEventListener('submit', async e => {
+document.getElementById("postForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const token = document.getElementById('token').value.trim();
-  const title = document.getElementById('title').value.trim();
-  const category = document.getElementById('category').value;
-  const body  = document.getElementById('body').value;
-  const permalinkInput = document.getElementById('permalink').value.trim();
+
+  const token = document.getElementById("token").value.trim();
+  const title = document.getElementById("title").value.trim();
+  const category = document.getElementById("category").value;
+  const body = document.getElementById("body").value;
+  const permalinkInput = document.getElementById("permalink").value.trim();
 
   const octokit = new Octokit({ auth: token });
   const date = new Date().toISOString().slice(0, 10);
 
-  // スラッグ正規化: フォルダ区切り(/)はハイフンに
-  const raw = permalinkInput
-    ? permalinkInput.replace(/^\//, '').replace(/\.html$/, '')
-    : `${date}-${title.replace(/\s+/g, '-').toLowerCase()}`;
-  const slug = raw.replace(/\//g, '-');
-  const filename = `_posts/${slug}.html`;
+  // スラッグ生成：必ず「YYYY-MM-DD-任意の文字列」にする
+  const base = permalinkInput
+    ? permalinkInput.replace(/^\//, "").replace(/\.html$/, "")
+    : title.replace(/\s+/g, "-").toLowerCase();
+  const clean = base.replace(/\//g, "-");           // スラッシュをハイフンに
+  const slug = `${date}-${clean}`;                  // 日付プレフィックス付き
+  const filename = `_posts/${slug}.html`;           // 常に _posts 以下直下に出力
 
   // front matter 組み立て
   let fm = `---\nlayout: post\ntitle: "${title}"\ndate: ${date}\ncategory: ${category}\n`;
@@ -36,18 +38,18 @@ document.getElementById('postForm').addEventListener('submit', async e => {
   const content = utf8ToBase64(fm + body);
 
   try {
-    await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
-      owner: 'Riku-tatuto',
-      repo: 'minecraft-blog',
+    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+      owner: "Riku-tatuto",
+      repo: "minecraft-blog",
       path: filename,
       message: `Add post: ${title}`,
       content,
-      branch: 'main'
+      branch: "main"
     });
-    alert('記事をコミットしました');
+    alert("記事をコミットしました");
     e.target.reset();
   } catch (err) {
     console.error(err);
-    alert('投稿エラー: コンソールを確認してください');
+    alert("投稿エラー：コンソールを確認してください");
   }
 });
