@@ -1,6 +1,9 @@
-import { fetchAndRender, renderPosts } from './posts.js'; // 既存呼び出し箇所
+// assets/js/posts.js
 
-// renderPosts を下記のように置き換え
+import { db } from './firebase.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+
+// 記事一覧を描画（サムネイル＋タイトル）
 export async function renderPosts(posts) {
   const c = document.getElementById('posts-container');
   c.innerHTML = '';
@@ -16,18 +19,25 @@ export async function renderPosts(posts) {
   });
 }
 
-// fetchAndRender は URL 二重付与を避け、キャッシュバスティングはそのまま利用
-export async function fetchAndRender({searchTerm='',sortByLikes=false}={}) {
+// JSON を取得し検索・ソート・描画
+export async function fetchAndRender({ searchTerm = '', sortByLikes = false } = {}) {
   const res = await fetch(`/minecraft-blog/posts.json?ts=${Date.now()}`);
   let posts = await res.json();
+
+  // 検索フィルタ
   if (searchTerm) {
-    posts = posts.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    posts = posts.filter(p =>
+      p.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   }
-  if(sortByLikes) {
-    const likesRef = doc(db,'likes','_all');
-    const snap = await getDoc(likesRef).catch(()=>({exists:()=>false}));
-    const allLikes = snap.exists()?snap.data():{};
-    posts.sort((a,b)=>(allLikes[b.slug]||0)-(allLikes[a.slug]||0));
+
+  // いいねソート（不要なら削除）
+  if (sortByLikes) {
+    const likesRef = doc(db, 'likes', '_all');
+    const snap = await getDoc(likesRef).catch(() => ({ exists: () => false }));
+    const allLikes = snap.exists() ? snap.data() : {};
+    posts.sort((a, b) => (allLikes[b.slug] || 0) - (allLikes[a.slug] || 0));
   }
+
   await renderPosts(posts);
 }
